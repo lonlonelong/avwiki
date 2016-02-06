@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.killxdcj.avwiki.spiderrecordMapper">
+
+	<resultMap type="spiderrecord" id="spiderrecord">
+		<result column="ID" property="id" />
+		<result column="GMT_CREATE" property="gmtCreate" />
+		<result column="GMT_MODIFY" property="gmtModify" />
+		<result column="IS_DELETE" property="isDelete" />
+		<result column="VISITED" property="visited" />
+		<result column="SIGN" property="sign" />
+		<result column="URL" property="url" />
+	</resultMap>
+
+	<insert id="insertSpiderRecord" parameterType="spiderrecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into spider (SIGN, URL)
+		values(#{sign},#{url})
+	</insert>
+
+	<update id="updateSpiderRecord" parameterType="string">
+		update spider
+		set gmt_modify=now()
+		<if test="isDelete != null">
+			,IS_DELETE=#{isDelete}
+		</if>
+		<if test="visited != null">
+			,VISITED=#{visited}
+		</if>
+		<if test="sign != null">
+			,SIGN=#{sign}
+		</if>
+		<if test="url != null">
+			,URL=#{url}
+		</if>
+		where id=#{id}
+	</update>
+
+	<select id="selectSpiderRecord" parameterType="map" resultMap="spiderrecord">
+		select * from spider
+		<where>
+			<if test="id != null">
+				ID=#{id}
+			</if>
+			<if test="isDelete != null">
+				and IS_DELETE=#{isDelete}
+			</if>
+			<if test="visited != null">
+				and VISITED=#{visited}
+			</if>
+			<if test="sign != null">
+				and SIGN=#{sign}
+			</if>
+			<if test="url != null">
+				and URL=#{url}
+			</if>
+		</where>
+	</select>
+
+	<select id="getSpiderRecord" parameterType="string" resultMap="spiderrecord">
+		select * from skyeye_monitor_rule where is_delete = 'n' and
+		visited='n' and sign = #{sign}
+	</select>
+
+</mapper>

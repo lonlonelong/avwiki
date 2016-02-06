@@ -1,4 +1,4 @@
-package com.killxdcj.avwiki.database;
+package com.killxdcj.avwiki.mapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +10,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AvwikiSqlSessionFactory {
 	private static final Logger logger = Logger.getLogger(AvwikiSqlSessionFactory.class);
 	
