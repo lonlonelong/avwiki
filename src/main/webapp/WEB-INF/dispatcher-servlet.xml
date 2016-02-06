@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/task  
+        http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+  
+  
+    <mvc:annotation-driven />
+    
+    <task:annotation-driven />
+        
+    <context:component-scan base-package="com.killxdcj" />
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView">
+			<value>/error</value>
+		</property>
+		<property name="defaultStatusCode">
+			<value>500</value>
+		</property>
+		<property name="warnLogCategory">
+			<value>org.springframework.web.servlet.handler.SimpleMappingExceptionResolver</value>
+		</property>
+	</bean>
+	<!-- 
+	<bean class= "com.killxdcj.skyeye.context.SpringContextUtil" lazy-init="false" />
+	 -->
+	 <!-- 
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.killxdcj.com"></property>
+		<property name="username" value="monitor@killxdcj.com"></property>
+		<property name="password" value="p@ssW0rd"></property>
+		<property name="javaMailProperties" >
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.timeout">25000</prop>
+			</props>
+		</property>
+	</bean>
+   -->
+  <!-- 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/test/*"/>
+            <bean class="com.killxdcj.spring.MyInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+  -->
+</beans> 
