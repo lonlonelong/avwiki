@@ -5,7 +5,7 @@
 
 <mapper namespace="com.killxdcj.avwiki.spiderrecordMapper">
 
-	<resultMap type="spiderrecord" id="spiderrecord">
+	<resultMap type="SpiderRecord" id="spiderrecord">
 		<result column="ID" property="id" />
 		<result column="GMT_CREATE" property="gmtCreate" />
 		<result column="GMT_MODIFY" property="gmtModify" />
@@ -15,13 +15,12 @@
 		<result column="URL" property="url" />
 	</resultMap>
 
-	<insert id="insertSpiderRecord" parameterType="spiderrecord"
-		useGeneratedKeys="true" keyProperty="id">
+	<insert id="insertSpiderRecord" parameterType="SpiderRecord" useGeneratedKeys="true" keyProperty="id">
 		insert into spider (SIGN, URL)
 		values(#{sign},#{url})
 	</insert>
 
-	<update id="updateSpiderRecord" parameterType="string">
+	<update id="updateSpiderRecord" parameterType="map">
 		update spider
 		set gmt_modify=now()
 		<if test="isDelete != null">
