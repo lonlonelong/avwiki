@@ -58,11 +58,7 @@
 				and URL=#{url}
 			</if>
 		</where>
-	</select>
-
-	<select id="getSpiderRecord" parameterType="string" resultMap="spiderrecord">
-		select * from skyeye_monitor_rule where is_delete = 'n' and
-		visited='n' and sign = #{sign}
+		 order by gmt_create asc
 	</select>
 
 </mapper>

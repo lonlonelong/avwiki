@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.killxdcj.avwiki.entiy.SpiderRecord;
 import com.killxdcj.avwiki.mapper.SpiderRecordMapperImpl;
 import com.killxdcj.avwiki.service.SpiderRecordServiceImpl;
+import com.killxdcj.avwiki.spider.Spider;
 
 @Controller
 @RequestMapping("test")
@@ -24,6 +25,9 @@ public class TestAction {
 	
 	@Autowired
 	private SpiderRecordServiceImpl spiderRecordServiceImpl;
+	
+	@Autowired
+	private Spider spider;
 	
 	@RequestMapping("test.do")
 	public ModelAndView test() {
@@ -81,6 +85,20 @@ public class TestAction {
 		List<SpiderRecord> spiderRecords = spiderRecordServiceImpl.getSpiderRecord("caribbean", true);
 		
 		spiderRecords = spiderRecordServiceImpl.getSpiderRecord("caribbean", false);
+		
+		ModelAndView view = new ModelAndView();
+		view.addObject("result", "SUCCESS");
+		view.setViewName("result");
+		return view;
+	}
+	
+	@RequestMapping("spider.do")
+	public ModelAndView testSpider() {
+		
+		spider.addSeed("http://www.caribbeancompr.com/listpages/1.html");
+		spider.addIncludeRegex("http://www.caribbeancompr.com/listpages/[0-9]+.html");
+		spider.addIncludeRegex("http://www.caribbeancompr.com/moviepages/[0-9]+_[0-9]+/index.html");
+		spider.Start();
 		
 		ModelAndView view = new ModelAndView();
 		view.addObject("result", "SUCCESS");
