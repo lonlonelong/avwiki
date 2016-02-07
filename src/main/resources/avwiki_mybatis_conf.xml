@@ -5,6 +5,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="SpiderRecord" type="com.killxdcj.avwiki.entiy.SpiderRecord" />
+		<typeAlias alias="MovieInfo" type="com.killxdcj.avwiki.entiy.MovieInfo" />
 	</typeAliases>
 	
 	<environments default="development">
@@ -13,13 +14,14 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />
 				<property name="url" value="jdbc:mysql://localhost:3306/avwiki" />
-				<property name="username" value="username" />
-				<property name="password" value="********" />
+				<property name="username" value="root" />
+				<property name="password" value="xdcj0613" />
 			</dataSource>
 		</environment>
 	</environments>
 
 	<mappers>
 		<mapper resource="avwiki_spiderrecord_map.xml" />
+		<mapper resource="avwiki_movieinfo_map.xml" />
 	</mappers>
 </configuration>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.killxdcj.avwiki.movieinfoMapper">
+	<resultMap type="MovieInfo" id="movieinfo">
+		<result column="ID" property="id" />
+		<result column="GMT_CREATE" property="gmtCreate" />
+		<result column="GMT_MODIFY" property="gmtModify" />
+		<result column="IS_DELETE" property="isDelete" />
+		<result column="NUMBER" property="number" />
+		<result column="COMPANY" property="company" />
+		<result column="STUDIO" property="studio" />
+		<result column="SERIES" property="series" />
+		<result column="TITLE" property="title" />
+		<result column="PLAYER" property="player" />
+		<result column="CATEGORY" property="category" />
+		<result column="LABEL" property="label" />
+		<result column="ISSUEDATE" property="issuedate" />
+		<result column="PLAYTIME" property="playtime" />
+		<result column="COMMENT" property="comment" />
+		<result column="RESERVE" property="reserve" />
+	</resultMap>
+
+	<insert id="insertMovieInfo" parameterType="MovieInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO movieinfo 
+		(IS_DELETE
+		<if test="number != null">
+			, NUMBER
+		</if>
+		<if test="company != null">
+			, COMPANY
+		</if>
+		<if test="studio != null">
+			, STUDIO
+		</if>
+		<if test="series != null">
+			, SERIES
+		</if>
+		<if test="title != null">
+			, TITLE
+		</if>
+		<if test="player != null">
+			, PLAYER
+		</if>
+		<if test="category != null">
+			, CATEGORY
+		</if>
+		<if test="label != null">
+			, LABEL
+		</if>
+		<if test="issuedate != null">
+			, ISSUEDATE
+		</if>
+		<if test="playtime != null">
+			, PLAYTIME
+		</if>
+		<if test="comment != null">
+			, COMMENT
+		</if>
+		<if test="reserve != null">
+			, RESERVE
+		</if>
+		) 
+		VALUES ('n'
+		<if test="number != null">
+			, #{number}
+		</if>
+		<if test="company != null">
+			, #{company}
+		</if>
+		<if test="studio != null">
+			, #{studio}
+		</if>
+		<if test="series != null">
+			, #{series}
+		</if>
+		<if test="title != null">
+			, #{title}
+		</if>
+		<if test="player != null">
+			, #{player}
+		</if>
+		<if test="category != null">
+			, #{category}
+		</if>
+		<if test="label != null">
+			, #{label}
+		</if>
+		<if test="issuedate != null">
+			, #{issuedate}
+		</if>
+		<if test="playtime != null">
+			, #{playtime}
+		</if>
+		<if test="comment != null">
+			, #{comment}
+		</if>
+		<if test="reserve != null">
+			, #{reserve}
+		</if>
+		)
+	</insert>
+	
+</mapper>
