@@ -12,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.killxdcj.avwiki.entiy.SpiderRecord;
 import com.killxdcj.avwiki.mapper.SpiderRecordMapperImpl;
+import com.killxdcj.avwiki.schedule.CaribbeanPageSchedule;
+import com.killxdcj.avwiki.service.MovieInfoServiceImpl;
 import com.killxdcj.avwiki.service.SpiderRecordServiceImpl;
 import com.killxdcj.avwiki.spider.Spider;
 
@@ -27,7 +29,13 @@ public class TestAction {
 	private SpiderRecordServiceImpl spiderRecordServiceImpl;
 	
 	@Autowired
-	private Spider spider;
+	private MovieInfoServiceImpl movieInfoService;
+	
+	@Autowired
+	CaribbeanPageSchedule caribbeanPageSchedule;
+	
+//	@Autowired
+//	private Spider spider;
 	
 	@RequestMapping("test.do")
 	public ModelAndView test() {
@@ -94,11 +102,37 @@ public class TestAction {
 	
 	@RequestMapping("spider.do")
 	public ModelAndView testSpider() {
-		
+		Spider spider = new Spider("test");
 		spider.addSeed("http://www.caribbeancompr.com/listpages/1.html");
 		spider.addIncludeRegex("http://www.caribbeancompr.com/listpages/[0-9]+.html");
 		spider.addIncludeRegex("http://www.caribbeancompr.com/moviepages/[0-9]+_[0-9]+/index.html");
 		spider.Start();
+		
+		ModelAndView view = new ModelAndView();
+		view.addObject("result", "SUCCESS");
+		view.setViewName("result");
+		return view;
+	}
+	
+	@RequestMapping("movieinfo.do")
+	public ModelAndView testMmovieinfo() {
+		Map<Object, Object> paramMap = new HashMap<Object, Object>();
+		paramMap.put("number", "15845");
+		paramMap.put("company", "546464");
+		paramMap.put("series", "fgfdgs");
+		paramMap.put("title", "xxxx");
+		paramMap.put("playtime", "qwqe");
+		String id = movieInfoService.insertMovieInfo(paramMap);
+		
+		ModelAndView view = new ModelAndView();
+		view.addObject("result", "SUCCESS");
+		view.setViewName("result");
+		return view;
+	}
+	
+	@RequestMapping("caribbean.do")
+	public ModelAndView testCaribbeanPageSchedule() {
+		caribbeanPageSchedule.doSchedule();
 		
 		ModelAndView view = new ModelAndView();
 		view.addObject("result", "SUCCESS");

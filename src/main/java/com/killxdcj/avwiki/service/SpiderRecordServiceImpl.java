@@ -6,11 +6,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.killxdcj.avwiki.entiy.SpiderRecord;
 import com.killxdcj.avwiki.mapper.SpiderRecordMapperImpl;
 
 @Component
+@Repository("spiderRecordService")
 public class SpiderRecordServiceImpl implements SpiderRecordService {
 
 	@Autowired
