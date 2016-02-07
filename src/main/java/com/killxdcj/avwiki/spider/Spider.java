@@ -19,15 +19,17 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.killxdcj.avwiki.caribbean.CaribbeanPageProcessor;
+import com.killxdcj.avwiki.context.AvwikiContextUtil;
 import com.killxdcj.avwiki.entiy.SpiderRecord;
+import com.killxdcj.avwiki.service.SpiderRecordService;
 import com.killxdcj.avwiki.service.SpiderRecordServiceImpl;
 
-@Component
 public class Spider {
 	private static final Logger logger = Logger.getLogger(Spider.class);
 
-	@Autowired
-	private SpiderRecordServiceImpl spiderRecordService;
+	private SpiderRecordServiceImpl spiderRecordService = null;
+	private PageProcessor pageProcessor = null;
 	
 	private List<String> seedList = new ArrayList<String>();
 	private Map<String, String> urlUnVisit = new HashMap<String, String>();
@@ -37,6 +39,7 @@ public class Spider {
 	private String sign = "caribbean";
 	
 	public void Start() {
+		spiderRecordService = AvwikiContextUtil.getBean("spiderRecordService");
 		loadSpiderInfo();
 		doSpider();
 	}
@@ -59,6 +62,9 @@ public class Spider {
 				paramMap.put("url", seed);
 				String id = spiderRecordService.insertSpiderRecord(paramMap);
 				urlUnVisit.put(seed, id);
+			} else if (urlVisited.containsKey(seed)) {
+				urlUnVisit.put(seed, urlVisited.get(seed));
+				urlVisited.remove(seed);
 			}
 		}
 	}
@@ -73,14 +79,14 @@ public class Spider {
 					/*
 					 * 做内容分析 
 					 * */
+					if (null != pageProcessor) {
+						pageProcessor.processPage(url, strHtml);
+					}
 				} else {
 					
 				}
 				updateRecord(url);
-				System.out.println("OK " + url);
-				// 提取url 添加 url
-				// 调用用户 匹配
-				// 更新抓取记录
+//				System.out.println("OK " + url);
 			}
 		}
 	}
@@ -91,6 +97,9 @@ public class Spider {
 		CloseableHttpResponse httpResponse = null;
 		try {
 			HttpGet httpGet = new HttpGet(url);
+			httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1");
+			httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+	
 			httpResponse = httpClient.execute(httpGet);
 			if (httpResponse.getStatusLine().getStatusCode() == 200) {
 				HttpEntity httpEntity = httpResponse.getEntity();
@@ -124,7 +133,8 @@ public class Spider {
 			}
 		}
 		
-		String patternString = "<[a|A]\\s+href=([^>]*\\s*>)";
+		//String patternString = "<[a|A]\\s+href=([^>]*\\s*>)";
+		String patternString = "href=\"(.*)\"";
         Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(strHtml);
         // 初次匹配到的url是形如：
@@ -152,7 +162,7 @@ public class Spider {
 				String id = spiderRecordService.insertSpiderRecord(paramMap);
 				urlUnVisit.put(tempURL, id);
 				
-				System.out.println("ADD " + tempURL);
+//				System.out.println("ADD " + tempURL);
 			}
         }
 
@@ -182,27 +192,33 @@ public class Spider {
 		urlUnVisit.remove(url);
 	}
 	
-//	public Spider(String signString) {
-//		sign = signString;
-//	}
+	public Spider(String signString) {
+		sign = signString;
+	}
 	
 	private String getHtmlCharset(String strHtml) {
 		String strCharset = "utf-8";
-		String regex = "(<[^>]*(C|c)(O|o)(N|n)(T|t)(E|e)(N|n)(T|t)-(T|t)(Y|y)(P|p)(E|e)[^>]*>)";
+		String regex = "(<(M|m)(E|e)(T|t)(A|a)[^>]*(C|c)(H|h)(A|a)(R|r)(S|s)(E|e)(T|t)[^>]*>)";
 		Pattern pattern = Pattern.compile(regex);  
         Matcher matcher = pattern.matcher(strHtml);
         if (matcher.find()) {
         	strHtml = matcher.group();
-        	regex = "((C|c)(H|h)(A|a)(R|r)(S|s)(E|e)(T|t)=[^;\"]+(;|\"))";
+        	regex = "((C|c)(H|h)(A|a)(R|r)(S|s)(E|e)(T|t)=\"{0,1}[^;\"]+(;|\"))";
             pattern = Pattern.compile(regex);  
             matcher = pattern.matcher(strHtml);
             if (matcher.find()) {
             	strHtml = matcher.group();
-            	int nStart = strHtml.indexOf('=') + 1;
-                int nEnd = strHtml.indexOf(';');
-                if (nEnd == -1) {
-                	nEnd = strHtml.indexOf('\"');
-        		}
+            	int nStart = strHtml.indexOf("=\"");
+		        if (nStart == -1) {
+		        	nStart = strHtml.indexOf('=') + 1;
+				} else {
+					nStart = nStart + 2;
+				}
+		        
+		        int nEnd = strHtml.indexOf(';');
+		        if (nEnd == -1) {
+		        	nEnd = strHtml.indexOf('\"', nStart);
+				}
                 strCharset = strHtml.substring(nStart, nEnd);
     		}
 		}
@@ -220,6 +236,14 @@ public class Spider {
 	
 	public void addExcludeRegex(String regexString) {
 		excludeRegexList.add(regexString);
+	}
+
+	public PageProcessor getPageProcessor() {
+		return pageProcessor;
+	}
+
+	public void setPageProcessor(PageProcessor pageProcessor) {
+		this.pageProcessor = pageProcessor;
 	}
 	
 	
