@@ -24,19 +24,19 @@ public class AvwikiMailUtil {
 	public static boolean sendNotifyMail(String subject, String content) {
 		
 		try {
-			logger.info("SkyeyeMail.sendNotifyMail START");
+			logger.info("AvwikiMail.sendNotifyMail START");
 			JavaMailSenderImpl senderImpl = AvwikiContextUtil.getBean("mailSender");
 			
 			MimeMessage mailMessage = senderImpl.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage, false, "utf-8");
-			messageHelper.setTo("skyeye@killxdcj.com");
+			messageHelper.setTo("avwiki@killxdcj.com");
 			messageHelper.setFrom("monitor@killxdcj.com");
-			messageHelper.setSubject("[SKYEYE]【通知】" + subject);
+			messageHelper.setSubject("[AVWIKI]【通知】" + subject);
 			messageHelper.setText(content);
 			senderImpl.send(mailMessage);
-			logger.info("SkyeyeMail.sendNotifyMail END");
+			logger.info("AvwikiMail.sendNotifyMail END");
 		} catch (Exception e) {
-			logger.error("SkyeyeMail.sendNotifyMail error:" + e.getMessage());
+			logger.error("AvwikiMail.sendNotifyMail error:" + e.getMessage());
 			return false;
 		}
 		
@@ -46,7 +46,7 @@ public class AvwikiMailUtil {
 	public static boolean sendMail(String host, String user, String pwd,
 			String mailTo, String mailFrom, String subject, String content) {
 		try {
-			logger.info("SkyeyeMail.sendMail START");
+			logger.info("AvwikiMail.sendMail START");
 			JavaMailSenderImpl senderImpl = AvwikiContextUtil.getBean("mailSender");
 			senderImpl.setHost(host);
 			senderImpl.setUsername(user);
@@ -59,9 +59,9 @@ public class AvwikiMailUtil {
 			messageHelper.setSubject(subject);
 			messageHelper.setText(content);
 			senderImpl.send(mailMessage);
-			logger.info("SkyeyeMail.sendMail END");
+			logger.info("AvwikiMail.sendMail END");
 		} catch (Exception e) {
-			logger.error("SkyeyeMail.sendMail error:" + e.getMessage());
+			logger.error("AvwikiMail.sendMail error:" + e.getMessage());
 			return false;
 		}
 		return true;
@@ -91,7 +91,7 @@ public class AvwikiMailUtil {
 				mailList.removeAll(endMails);
 			}
 		} catch (Exception e) {
-			logger.error("SkyeyeMail.doSendAsyncMail error:" + e.getMessage());
+			logger.error("AvwikiMail.doSendAsyncMail error:" + e.getMessage());
 			return false;
 		}
 		return true;

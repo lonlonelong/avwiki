@@ -40,11 +40,34 @@ public class Spider {
 	private String sign;
 	private SpiderCount spiderCount;
 	
-	public void Start() {
+	public void Init() {
 		spiderCount = new SpiderCount(sign);
 		spiderRecordService = AvwikiContextUtil.getBean("spiderRecordService");
 		loadSpiderInfo();
-		doSpider();
+	}
+	
+	public void Start() {
+		while (!urlUnVisit.keySet().isEmpty()) {
+			String[] urlArray = urlUnVisit.keySet().toArray(new String[0]);
+			for (String url : urlArray) {
+				String strHtml = getUrlContent(url);
+				if (null != strHtml) {
+					captureUrl(url, strHtml);
+					if (null != pageProcessor) {
+						pageProcessor.processPage(url, strHtml);
+					}
+					spiderRecordService.setRecordVisited(urlUnVisit.get(url));
+					spiderCount.increaseVisitOK();
+				} else {
+					logger.error("Spider visit url error : " + url);
+					spiderCount.increaseVisitErr();
+				}
+				urlVisited.put(url, urlUnVisit.get(url));
+				urlUnVisit.remove(url);
+			}
+		}
+		
+		spiderCount.setEndDate(new Date());
 	}
 	
 	private void loadSpiderInfo() {
@@ -68,28 +91,6 @@ public class Spider {
 			} else if (urlVisited.containsKey(seed)) {
 				urlUnVisit.put(seed, urlVisited.get(seed));
 				urlVisited.remove(seed);
-			}
-		}
-	}
-	
-	private void doSpider() {
-		while (!urlUnVisit.keySet().isEmpty()) {
-			String[] urlArray = urlUnVisit.keySet().toArray(new String[0]);
-			for (String url : urlArray) {
-				String strHtml = getUrlContent(url);
-				if (null != strHtml) {
-					captureUrl(url, strHtml);
-					if (null != pageProcessor) {
-						pageProcessor.processPage(url, strHtml);
-					}
-					spiderRecordService.setRecordVisited(urlUnVisit.get(url));
-					spiderCount.increaseVisitOK();
-				} else {
-					logger.error("Spider visit url error : " + url);
-					spiderCount.increaseVisitErr();
-				}
-				urlVisited.put(url, urlUnVisit.get(url));
-				urlUnVisit.remove(url);
 			}
 		}
 	}
@@ -245,6 +246,10 @@ public class Spider {
 		spiderCount.setVisitedCount(urlVisited.size());
 		spiderCount.setUnVisitCount(urlUnVisit.size());
 		return spiderCount;
+	}
+
+	public String getSign() {
+		return sign;
 	}
 	
 	

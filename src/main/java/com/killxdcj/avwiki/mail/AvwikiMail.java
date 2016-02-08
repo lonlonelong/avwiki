@@ -55,11 +55,11 @@ public class AvwikiMail {
 	public static AvwikiMail makeNotifyMail(String subject, String text) {
 		AvwikiMail mail = new AvwikiMail();
 		mail.setHost("smtp.killxdcj.com");
-		mail.setUsername("test@killxdcj.com");
-		mail.setPassword("xxxxx");
-		mail.setTo("skyeye@killxdcj.com");
+		mail.setUsername("monitor@killxdcj.com");
+		mail.setPassword("xxxx");
+		mail.setTo("avwiki@killxdcj.com");
 		mail.setFrom("monitor@killxdcj.com");
-		mail.setSubject("[SKYEYE]【通知】" + subject);
+		mail.setSubject("[AVWIKI]【通知】" + subject);
 		mail.setText(text);
 		return mail;
 	}
