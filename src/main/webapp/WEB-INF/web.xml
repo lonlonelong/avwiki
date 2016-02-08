@@ -10,6 +10,11 @@
 		<param-value>classpath:log4j.properties</param-value><!-- log4j配置文件路径 -->
 	</context-param>
 
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>avwiki.root</param-value>
+	</context-param>
+
 	<listener>
 		<!-- 容器初始化（销毁）时开启（关闭）Log4j -->
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
