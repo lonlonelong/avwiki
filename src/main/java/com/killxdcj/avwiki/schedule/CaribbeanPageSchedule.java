@@ -1,5 +1,7 @@
 package com.killxdcj.avwiki.schedule;
 
+import java.lang.Thread.State;
+
 import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,20 @@ public class CaribbeanPageSchedule {
 		spider.addSeed("http://www.caribbeancompr.com/listpages/1.html");
 		spider.addIncludeRegex("http://www.caribbeancompr.com/listpages/[0-9]+.html");
 		spider.addIncludeRegex("http://www.caribbeancompr.com/moviepages/[0-9]+_[0-9]+/index.html");
-		spider.Start();
+		
+		ScheduleThread scheduleThread = new ScheduleThread(spider);
+		scheduleThread.start();
+		
+		try {
+			while (scheduleThread.getState() != State.TERMINATED) {
+				scheduleThread.join(60 * 1000);
+				String strLog = spider.getSpiderCount().toString();
+				logger.info(strLog);
+				System.out.println(strLog);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		logger.info("CaribbeanPageSchedule:END");
 	}
