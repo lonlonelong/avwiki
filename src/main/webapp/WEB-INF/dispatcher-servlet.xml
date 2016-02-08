@@ -45,11 +45,11 @@
 	
 	<bean class= "com.killxdcj.avwiki.context.AvwikiContextUtil" lazy-init="false" />
 
-	 <!-- 
+	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.killxdcj.com"></property>
-		<property name="username" value="monitor@killxdcj.com"></property>
-		<property name="password" value="p@ssW0rd"></property>
+		<property name="username" value="test@killxdcj.com"></property>
+		<property name="password" value="xxxx"></property>
 		<property name="javaMailProperties" >
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
@@ -57,7 +57,6 @@
 			</props>
 		</property>
 	</bean>
-   -->
   <!-- 
     <mvc:interceptors>
         <mvc:interceptor>

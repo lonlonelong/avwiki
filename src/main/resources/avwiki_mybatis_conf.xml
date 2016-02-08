@@ -14,8 +14,8 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />
 				<property name="url" value="jdbc:mysql://localhost:3306/avwiki" />
-				<property name="username" value="root" />
-				<property name="password" value="xdcj0613" />
+				<property name="username" value="test" />
+				<property name="password" value="xxxx" />
 			</dataSource>
 		</environment>
 	</environments>
