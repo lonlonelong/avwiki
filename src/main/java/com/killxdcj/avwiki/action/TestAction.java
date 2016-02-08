@@ -12,7 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.killxdcj.avwiki.entiy.SpiderRecord;
 import com.killxdcj.avwiki.mapper.SpiderRecordMapperImpl;
-import com.killxdcj.avwiki.schedule.CaribbeanPageSchedule;
+import com.killxdcj.avwiki.schedule.CaribbeanSchedule;
+import com.killxdcj.avwiki.schedule.TokyoHotSchedule;
 import com.killxdcj.avwiki.service.MovieInfoServiceImpl;
 import com.killxdcj.avwiki.service.SpiderRecordServiceImpl;
 import com.killxdcj.avwiki.spider.Spider;
@@ -32,7 +33,10 @@ public class TestAction {
 	private MovieInfoServiceImpl movieInfoService;
 	
 	@Autowired
-	CaribbeanPageSchedule caribbeanPageSchedule;
+	private CaribbeanSchedule caribbeanPageSchedule;
+	
+	@Autowired
+	private TokyoHotSchedule tokyoHotSchedule;
 	
 //	@Autowired
 //	private Spider spider;
@@ -133,6 +137,16 @@ public class TestAction {
 	@RequestMapping("caribbean.do")
 	public ModelAndView testCaribbeanPageSchedule() {
 		caribbeanPageSchedule.doSchedule();
+		
+		ModelAndView view = new ModelAndView();
+		view.addObject("result", "SUCCESS");
+		view.setViewName("result");
+		return view;
+	}
+	
+	@RequestMapping("tokyohot.do")
+	public ModelAndView testTokyoHotSchedule() {
+		tokyoHotSchedule.doSchedule();
 		
 		ModelAndView view = new ModelAndView();
 		view.addObject("result", "SUCCESS");
