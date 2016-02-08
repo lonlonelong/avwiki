@@ -2,20 +2,22 @@ package com.killxdcj.avwiki.schedule;
 
 import java.lang.Thread.State;
 
+import javax.sound.midi.MidiDevice.Info;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.killxdcj.avwiki.caribbean.CaribbeanPageProcessor;
 import com.killxdcj.avwiki.context.MonitorContext;
 import com.killxdcj.avwiki.mail.AvwikiMailUtil;
+import com.killxdcj.avwiki.spider.CaribbeanPageProcessor;
 import com.killxdcj.avwiki.spider.Spider;
 import com.killxdcj.avwiki.spider.SpiderCount;
 
 @Component
-public class CaribbeanPageSchedule {
-	private static final Logger logger = Logger.getLogger(CaribbeanPageSchedule.class);
+public class CaribbeanSchedule {
+	private static final Logger logger = Logger.getLogger(CaribbeanSchedule.class);
 	
 	@Autowired
 	private MonitorContext monitorContext;
@@ -49,6 +51,7 @@ public class CaribbeanPageSchedule {
 							spiderCountOld.toString() + "\r\n" + spiderCountNew.toString());
 				}
 				spiderCountOld = spiderCountNew;
+				logger.info(spiderCountOld.getNormalStr());
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

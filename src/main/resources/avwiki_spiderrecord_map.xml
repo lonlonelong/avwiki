@@ -16,8 +16,8 @@
 	</resultMap>
 
 	<insert id="insertSpiderRecord" parameterType="SpiderRecord" useGeneratedKeys="true" keyProperty="id">
-		insert into spider (SIGN, URL)
-		values(#{sign},#{url})
+		insert into spider (GMT_CREATE, GMT_MODIFY, SIGN, URL)
+		values(now(), now(), #{sign},#{url})
 	</insert>
 
 	<update id="updateSpiderRecord" parameterType="map">

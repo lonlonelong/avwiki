@@ -1,4 +1,4 @@
-package com.killxdcj.avwiki.caribbean;
+package com.killxdcj.avwiki.spider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,18 +11,15 @@ import org.jsoup.select.Elements;
 
 import com.killxdcj.avwiki.context.AvwikiContextUtil;
 import com.killxdcj.avwiki.service.MovieInfoService;
-import com.killxdcj.avwiki.spider.PageProcessor;
 import com.killxdcj.avwiki.util.HttpUtil;
 
 public class CaribbeanPageProcessor implements PageProcessor {
-	
-	private MovieInfoService movieInfoService;
 
 	public void processPage(String url, String html) {
 		String regex = "http://www.caribbeancompr.com/moviepages/[0-9]+_[0-9]+/index.html";
 		if (!Pattern.matches(regex, url)) return;
 
-		movieInfoService = AvwikiContextUtil.getBean("movieInfoService");
+		MovieInfoService movieInfoService = AvwikiContextUtil.getBean("movieInfoService");
 		Map<Object, Object> movieInfoMap = new HashMap<Object, Object>();
 		
 		int nIndex = "http://www.caribbeancompr.com/moviepages/".length();

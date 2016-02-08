@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="com.killxdcj.avwiki.movieinfoMapper">
 	<resultMap type="MovieInfo" id="movieinfo">
 		<result column="ID" property="id" />
@@ -23,9 +23,12 @@
 		<result column="RESERVE" property="reserve" />
 	</resultMap>
 
-	<insert id="insertMovieInfo" parameterType="MovieInfo" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO movieinfo 
-		(IS_DELETE
+	<insert id="insertMovieInfo" parameterType="MovieInfo"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO movieinfo
+		(GMT_CREATE
+		, GMT_MODIFY
+		, IS_DELETE
 		<if test="number != null">
 			, NUMBER
 		</if>
@@ -62,8 +65,10 @@
 		<if test="reserve != null">
 			, RESERVE
 		</if>
-		) 
-		VALUES ('n'
+		)
+		VALUES (now()
+		, now()
+		, 'n'
 		<if test="number != null">
 			, #{number}
 		</if>
@@ -102,5 +107,5 @@
 		</if>
 		)
 	</insert>
-	
+
 </mapper>

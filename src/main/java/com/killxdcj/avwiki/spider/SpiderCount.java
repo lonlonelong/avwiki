@@ -15,13 +15,18 @@ public class SpiderCount {
 	@Override
 	public String toString() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd H:m:s");
-//		return "SpiderCount [sign=" + sign + ", visitOKCount=" + visitOKCount
-//				+ ", visitErrCount=" + visitErrCount + ", visitedCount=" + visitedCount + ", unVisitCount="
-//				+ unVisitCount + ", startDate=" + format.format(startDate) + ", endDate=" + format.format(endDate) +  "]";
 		return "标志：" + sign + "\r\n成功爬取：" + visitOKCount
 				+ "\r\n爬取失败：" + visitErrCount + "\r\n总爬取量：" + visitedCount + "\r\n待爬取量："
 				+ unVisitCount + "\r\n开始时间：" + format.format(startDate) + ((null == endDate) ? "" : "\r\n终止时间：" + format.format(endDate));
 	}
+	
+	public String getNormalStr() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd H:m:s");
+		return "SpiderCount [sign=" + sign + ", visitOKCount=" + visitOKCount
+		+ ", visitErrCount=" + visitErrCount + ", visitedCount=" + visitedCount + ", unVisitCount="
+		+ unVisitCount + ", startDate=" + format.format(startDate) +  "]";
+	}
+	
 	public SpiderCount(String strSign) {
 		sign = strSign;
 		startDate = new Date();
