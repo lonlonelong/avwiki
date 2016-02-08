@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,13 +16,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.killxdcj.avwiki.caribbean.CaribbeanPageProcessor;
 import com.killxdcj.avwiki.context.AvwikiContextUtil;
 import com.killxdcj.avwiki.entiy.SpiderRecord;
-import com.killxdcj.avwiki.service.SpiderRecordService;
 import com.killxdcj.avwiki.service.SpiderRecordServiceImpl;
 
 public class Spider {
@@ -137,6 +131,12 @@ public class Spider {
 			}
 		}
 		
+		String urlBase = null;
+		nIndex = url.indexOf("?");
+		if (nIndex != -1) {
+			urlBase = url.substring(0, nIndex);
+		}
+		
 		//String patternString = "<[a|A]\\s+href=([^>]*\\s*>)";
 		String patternString = "href=\"(.*)\"";
         Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
@@ -154,6 +154,8 @@ public class Spider {
             if (!tempURL.startsWith("http")) {
             	if (tempURL.startsWith("/")) {
             		tempURL = urlHost + tempURL;
+				} else if (tempURL.startsWith("?") && urlBase != null) {
+					tempURL = urlBase + tempURL;
 				} else {
 					tempURL = urlHost + "/" + tempURL;
 				}
