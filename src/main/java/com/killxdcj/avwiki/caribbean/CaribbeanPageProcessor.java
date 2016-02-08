@@ -51,13 +51,13 @@ public class CaribbeanPageProcessor implements PageProcessor {
 				Element element = movieinfos.get(i);
 				String name = element.getElementsByTag("dt").first().text();
 				if (name.equals("³öÑÝ:")) {
-					Elements players = element.getElementsByTag("dd");
+					Elements players = element.getElementsByTag("dd").first().getElementsByTag("strong");
 					String strPalyer = "";
 					if (players.size() > 0) {
-						strPalyer += players.get(0).getElementsByTag("strong").first().getElementsByTag("a").first().text();
+						strPalyer += players.get(0).getElementsByTag("a").first().text();
 					}
 					for (int j = 1; j < players.size(); j++) {
-						strPalyer += "#" + players.get(j).getElementsByTag("strong").first().getElementsByTag("a").first().text();
+						strPalyer += "#" + players.get(j).getElementsByTag("a").first().text();
 					}
 					movieInfoMap.put("player", strPalyer);
 				} else if (name.equals("¥«¥Æ¥´¥ê©`:")) {//Category
