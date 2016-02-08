@@ -2,6 +2,7 @@ package com.killxdcj.avwiki.spider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +37,11 @@ public class Spider {
 	private Map<String, String> urlVisited = new HashMap<String, String>();
 	private List<String> includeRegexList = new ArrayList<String>();
 	private List<String> excludeRegexList = new ArrayList<String>();
-	private String sign = "caribbean";
+	private String sign;
+	private SpiderCount spiderCount;
 	
 	public void Start() {
+		spiderCount = new SpiderCount(sign);
 		spiderRecordService = AvwikiContextUtil.getBean("spiderRecordService");
 		loadSpiderInfo();
 		doSpider();
@@ -76,17 +79,17 @@ public class Spider {
 				String strHtml = getUrlContent(url);
 				if (null != strHtml) {
 					captureUrl(url, strHtml);
-					/*
-					 * ×öÄÚÈÝ·ÖÎö 
-					 * */
 					if (null != pageProcessor) {
 						pageProcessor.processPage(url, strHtml);
 					}
+					spiderRecordService.setRecordVisited(urlUnVisit.get(url));
+					spiderCount.increaseVisitOK();
 				} else {
-					
+					logger.error("Spider visit url error : " + url);
+					spiderCount.increaseVisitErr();
 				}
-				updateRecord(url);
-//				System.out.println("OK " + url);
+				urlVisited.put(url, urlUnVisit.get(url));
+				urlUnVisit.remove(url);
 			}
 		}
 	}
@@ -161,8 +164,6 @@ public class Spider {
 				paramMap.put("sign", sign);
 				String id = spiderRecordService.insertSpiderRecord(paramMap);
 				urlUnVisit.put(tempURL, id);
-				
-//				System.out.println("ADD " + tempURL);
 			}
         }
 
@@ -184,12 +185,6 @@ public class Spider {
 			}
 		}
 		return false;
-	}
-	
-	private void updateRecord(String url) {
-		spiderRecordService.setRecordVisited(urlUnVisit.get(url));
-		urlVisited.put(url, urlUnVisit.get(url));
-		urlUnVisit.remove(url);
 	}
 	
 	public Spider(String signString) {
@@ -244,6 +239,12 @@ public class Spider {
 
 	public void setPageProcessor(PageProcessor pageProcessor) {
 		this.pageProcessor = pageProcessor;
+	}
+
+	public SpiderCount getSpiderCount() {
+		spiderCount.setVisitedCount(urlVisited.size());
+		spiderCount.setUnVisitCount(urlUnVisit.size());
+		return spiderCount;
 	}
 	
 	
