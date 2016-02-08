@@ -20,8 +20,6 @@ public class MonitorAction {
 		ModelAndView view = new ModelAndView();
 		view.addObject("result", monitorContext.getCurrentSpiderCount());
 		view.setViewName("result");
-		
-		AvwikiMailUtil.sendNotifyMailAsync("AVWIKI 运行日报", monitorContext.getCurrentSpiderCount());
 		return view;
 	}
 }
