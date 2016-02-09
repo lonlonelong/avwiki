@@ -38,19 +38,34 @@ public class TokyoHotPageProcessor implements PageProcessor {
 				if (strdt.equals("出演者")) {
 					String strPlayer = "";
 					Elements players = dds.get(j).getElementsByTag("a");
-					strPlayer += players.get(0).text();
-					for (int k = 1; k < players.size(); k++) {
-						strPlayer = strPlayer + "#" + players.get(k).text();
+					for (int k = 0; k < players.size(); k++) {
+						if(k == 0) {
+							strPlayer = strPlayer + players.get(k).text();
+						} else {
+							strPlayer = strPlayer + "#" + players.get(k).text();
+						}
 					}
 					movieInfoMap.put("player", strPlayer);
 				} else if (strdt.equals("シリーズ")) {
-					movieInfoMap.put("series", dds.get(j).getElementsByTag("a").first().text());
+					String strSeries = "";
+					Elements series = dds.get(j).getElementsByTag("a");
+					for (int k = 0; k < series.size(); k++) {
+						if (k == 0) {
+							strSeries += series.get(k).text();
+						} else {
+							strSeries = strSeries + "#" + series.get(k).text();
+						}
+					}
+					movieInfoMap.put("series", strSeries);
 				} else if (strdt.equals("カテゴリ")) {
 					String strCat = "";
 					Elements cats = dds.get(j).getElementsByTag("a");
-					strCat += cats.get(0).text();
 					for (int k = 1; k < cats.size(); k++) {
-						strCat = strCat + "#" + cats.get(k).text();
+						if (k == 0) {
+							strCat += cats.get(k).text();
+						} else {
+							strCat = strCat + "#" + cats.get(k).text();
+						}
 					}
 					movieInfoMap.put("category", strCat);
 				} else if (strdt.equals("配信開始日")) {

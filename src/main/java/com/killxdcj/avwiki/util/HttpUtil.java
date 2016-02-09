@@ -5,12 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
 public class HttpUtil {
 	public static boolean saveHttpImg(String imgUrl, String localPath) {
@@ -23,7 +21,6 @@ public class HttpUtil {
 			httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 			httpResponse = httpClient.execute(httpGet);
 			if (httpResponse.getStatusLine().getStatusCode() == 200) {
-				HttpEntity httpEntity = httpResponse.getEntity();
 				InputStream inputStream = httpResponse.getEntity().getContent();
 				File file = new File(localPath);  
 	            if (file == null || !file.exists()) {  
@@ -34,7 +31,7 @@ public class HttpUtil {
 	            byte[] buf = new byte[1024];  
 	            int len = 0;  
 	            while ((len = inputStream.read(buf)) != -1) {  
-	                fos.write(buf, 0, len);  
+	                fos.write(buf, 0, len);
 	            }  
 	            fos.flush();  
 	            fos.close();

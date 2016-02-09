@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,8 @@ import com.killxdcj.avwiki.entiy.SpiderRecord;
 
 @Component
 public class SpiderRecordMapperImpl implements SpiderRecordMapper {
-
+	private static final Logger logger = Logger.getLogger(SpiderRecordMapperImpl.class);
+	
 	@Autowired
 	private AvwikiSqlSessionFactory avwikiSqlSessionFactory;
 	
@@ -28,6 +30,8 @@ public class SpiderRecordMapperImpl implements SpiderRecordMapper {
 		try {
 			sqlSession.insert("com.killxdcj.avwiki.spiderrecordMapper.insertSpiderRecord", spiderRecord);
 			sqlSession.commit();
+		} catch(Exception e) {
+			logger.error("SpiderRecordMapperImpl : insert data error " + e.getMessage());
 		} finally {
 			sqlSession.close();
 		}

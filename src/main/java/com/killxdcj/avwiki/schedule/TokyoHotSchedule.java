@@ -20,7 +20,7 @@ public class TokyoHotSchedule {
 	@Autowired
 	private MonitorContext monitorContext;
 	
-	@Scheduled(cron="0 0 1 * * ?")//每天0点触发
+	@Scheduled(cron="0 30 0 * * ?")//每天0点30触发
 	public void doSchedule() {
 		logger.info("TokyoHotSchedule:START");
 		
@@ -31,7 +31,7 @@ public class TokyoHotSchedule {
 		spider.addIncludeRegex("http://my.tokyo-hot.com/product/[0-9]+/");
 		spider.Init();
 		
-		AvwikiMailUtil.sendNotifyMailAsync("定时任务", "抓取任务开始\r\n" + spider.getSpiderCount().toString());
+		AvwikiMailUtil.sendNotifyMailAsync("定时任务", "Tokyo-Hot 抓取任务开始\r\n" + spider.getSpiderCount().toString());
 
 		monitorContext.registSpider(spider);
 		
@@ -52,7 +52,7 @@ public class TokyoHotSchedule {
 				logger.info(spiderCountOld.getNormalStr());
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error("TokyoHotSchedule:ERR " + e.getMessage());
 		}
 		monitorContext.unRegistSpider(spider);
 		AvwikiMailUtil.sendNotifyMailAsync("定时任务", "抓取任务结束\r\n" + spider.getSpiderCount().toString());

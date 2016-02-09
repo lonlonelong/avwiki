@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.sound.midi.MidiDevice.Info;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -44,20 +46,26 @@ public class Spider {
 		while (!urlUnVisit.keySet().isEmpty()) {
 			String[] urlArray = urlUnVisit.keySet().toArray(new String[0]);
 			for (String url : urlArray) {
-				String strHtml = getUrlContent(url);
-				if (null != strHtml) {
-					captureUrl(url, strHtml);
-					if (null != pageProcessor) {
-						pageProcessor.processPage(url, strHtml);
+				try {
+					String strHtml = getUrlContent(url);
+					if (null != strHtml) {
+						captureUrl(url, strHtml);
+						if (null != pageProcessor) {
+							pageProcessor.processPage(url, strHtml);
+						}
+						spiderRecordService.setRecordVisited(urlUnVisit.get(url));
+						spiderCount.increaseVisitOK();
+					} else {
+						logger.error("Spider visit url error : " + url);
+						spiderCount.increaseVisitErr();
 					}
-					spiderRecordService.setRecordVisited(urlUnVisit.get(url));
-					spiderCount.increaseVisitOK();
-				} else {
-					logger.error("Spider visit url error : " + url);
+				} catch (Exception e) {
 					spiderCount.increaseVisitErr();
+					logger.error(String.format("Spider Error sign:%s url:%s msg:%s", sign, url, e.getMessage()));
+				} finally {
+					urlVisited.put(url, urlUnVisit.get(url));
+					urlUnVisit.remove(url);
 				}
-				urlVisited.put(url, urlUnVisit.get(url));
-				urlUnVisit.remove(url);
 			}
 		}
 		

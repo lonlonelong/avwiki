@@ -3,6 +3,7 @@ package com.killxdcj.avwiki.mapper;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,8 @@ import com.killxdcj.avwiki.entiy.MovieInfo;
 
 @Component
 public class MovieInfoMapperImpl implements MovieInfoMapper {
-
+	private static final Logger logger = Logger.getLogger(MovieInfoMapperImpl.class);
+	
 	@Autowired
 	private AvwikiSqlSessionFactory avwikiSqlSessionFactory;
 	
@@ -36,6 +38,8 @@ public class MovieInfoMapperImpl implements MovieInfoMapper {
 		try {
 			sqlSession.insert("com.killxdcj.avwiki.movieinfoMapper.insertMovieInfo", movieInfo);
 			sqlSession.commit();
+		} catch(Exception e) {
+			logger.error("MovieInfoMapperImpl : insert data error " + e.getMessage());
 		} finally {
 			sqlSession.close();
 		}

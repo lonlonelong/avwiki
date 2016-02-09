@@ -33,7 +33,7 @@ public class CaribbeanSchedule {
 		spider.addIncludeRegex("http://www.caribbeancompr.com/moviepages/[0-9]+_[0-9]+/index.html");
 		spider.Init();
 		
-		AvwikiMailUtil.sendNotifyMailAsync("定时任务 Caribbean", "抓取任务开始\r\n" + spider.getSpiderCount().toString());
+		AvwikiMailUtil.sendNotifyMailAsync("定时任务", "Caribbean 抓取任务开始\r\n" + spider.getSpiderCount().toString());
 
 		monitorContext.registSpider(spider);
 		
@@ -54,10 +54,10 @@ public class CaribbeanSchedule {
 				logger.info(spiderCountOld.getNormalStr());
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error("CaribbeanPageSchedule:ERR " + e.getMessage());
 		}
 		monitorContext.unRegistSpider(spider);
-		AvwikiMailUtil.sendNotifyMailAsync("定时任务 Caribbean", "抓取任务结束\r\n" + spider.getSpiderCount().toString());
+		AvwikiMailUtil.sendNotifyMailAsync("定时任务", "Caribbean 抓取任务结束\r\n" + spider.getSpiderCount().toString());
 		logger.info("CaribbeanPageSchedule:END");
 	}
 }
