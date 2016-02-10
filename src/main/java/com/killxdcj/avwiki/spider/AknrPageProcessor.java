@@ -21,6 +21,8 @@ public class AknrPageProcessor implements PageProcessor {
 		MovieInfoService movieInfoService = AvwikiContextUtil.getBean("movieInfoService");
 		Map<Object, Object> movieInfoMap = new HashMap<Object, Object>();
 		
+		movieInfoMap.put("company", "Aknr");
+		
 		Document document = Jsoup.parse(html);
 		
 		movieInfoMap.put("title", document.getElementsByTag("h1").first().text());
