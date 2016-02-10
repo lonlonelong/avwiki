@@ -15,7 +15,7 @@ import com.killxdcj.avwiki.spider.AknrPageProcessor;
 
 @Component
 public class AknrSchedule {
-private static final Logger logger = Logger.getLogger(AknrSchedule.class);
+	private static final Logger logger = Logger.getLogger(AknrSchedule.class);
 	
 	@Autowired
 	private MonitorContext monitorContext;

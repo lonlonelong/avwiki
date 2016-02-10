@@ -55,7 +55,7 @@ public class TokyoHotSchedule {
 			logger.error("TokyoHotSchedule:ERR " + e.getMessage());
 		}
 		monitorContext.unRegistSpider(spider);
-		AvwikiMailUtil.sendNotifyMailAsync("定时任务", "抓取任务结束\r\n" + spider.getSpiderCount().toString());
+		AvwikiMailUtil.sendNotifyMailAsync("定时任务", "Tokyo-Hot 抓取任务结束\r\n" + spider.getSpiderCount().toString());
 		
 		logger.info("TokyoHotSchedule:END");
 	}
