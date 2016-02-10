@@ -146,7 +146,7 @@ public class Spider {
 		}
 		
 		//String patternString = "<[a|A]\\s+href=([^>]*\\s*>)";
-		String patternString = "href=\"(.*)\"";
+		String patternString = "href=\"[^\"]*\"";
         Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(strHtml);
         while (matcher.find()) {
@@ -174,7 +174,7 @@ public class Spider {
 			}
         }
         
-		patternString = "href='(.*)'";
+		patternString = "href='[^']*'";
         pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(strHtml);
         while (matcher.find()) {
