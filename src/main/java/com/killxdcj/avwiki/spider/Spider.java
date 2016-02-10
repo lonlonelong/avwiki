@@ -47,7 +47,7 @@ public class Spider {
 			String[] urlArray = urlUnVisit.keySet().toArray(new String[0]);
 			for (String url : urlArray) {
 				try {
-					String strHtml = getUrlContent(url);
+					String strHtml = getUrlContent(url.trim());
 					if (null != strHtml) {
 						captureUrl(url, strHtml);
 						if (null != pageProcessor) {
@@ -149,16 +149,40 @@ public class Spider {
 		String patternString = "href=\"(.*)\"";
         Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(strHtml);
-        // 初次匹配到的url是形如：
-        // <a href="http://bbs.life.xxx.com.cn/" target="_blank">
-        // 为此，需要进行下一步的处理，把真正的url抽取出来，
-        // 可以对于前两个"之间的部分进行记录得到url
         while (matcher.find()) {
             String tempURL = matcher.group();
             tempURL = tempURL.substring(tempURL.indexOf("\"") + 1);
             if (!tempURL.contains("\""))
                 continue;
             tempURL = tempURL.substring(0, tempURL.indexOf("\""));
+            if (!tempURL.startsWith("http")) {
+            	if (tempURL.startsWith("/")) {
+            		tempURL = urlHost + tempURL;
+				} else if (tempURL.startsWith("?") && urlBase != null) {
+					tempURL = urlBase + tempURL;
+				} else {
+					tempURL = urlHost + "/" + tempURL;
+				}
+            }
+
+            if (!isExcludeUrl(tempURL) && isIncludeUrl(tempURL) && !urlUnVisit.containsKey(tempURL) && !urlVisited.containsKey(tempURL)) {
+				Map<Object, Object> paramMap = new HashMap<Object, Object>();
+				paramMap.put("url", tempURL);
+				paramMap.put("sign", sign);
+				String id = spiderRecordService.insertSpiderRecord(paramMap);
+				urlUnVisit.put(tempURL, id);
+			}
+        }
+        
+		patternString = "href='(.*)'";
+        pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(strHtml);
+        while (matcher.find()) {
+            String tempURL = matcher.group();
+            tempURL = tempURL.substring(tempURL.indexOf("'") + 1);
+            if (!tempURL.contains("'"))
+                continue;
+            tempURL = tempURL.substring(0, tempURL.indexOf("'"));
             if (!tempURL.startsWith("http")) {
             	if (tempURL.startsWith("/")) {
             		tempURL = urlHost + tempURL;
